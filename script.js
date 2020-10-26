@@ -47,12 +47,14 @@ function getDogs() {
 function getBreed() {
   fetch(url)
     .then((response) => {
-      return response.json();
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText);
     })
     .then((json) => {
       const dogPic = json.message;
       let randomIndex = Math.floor(Math.random() * dogPic.length);
-      console.log(randomIndex);
 
       dogs = '';
 
@@ -61,6 +63,12 @@ function getBreed() {
     `;
 
       render();
+    })
+    .catch((error) => {
+      console.log('error happened');
+      dogs = '404: Breed Not Found.\nSee console for details';
+      render();
+      console.log(error.message);
     });
 }
 
